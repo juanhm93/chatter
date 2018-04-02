@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use Purifier;
 use Validator;
 
+use App\Mail\NotificationEmail;
+
 class ChatterPostController extends Controller
 {
     /**
@@ -140,12 +142,31 @@ class ChatterPostController extends Controller
         return false;
     }
 
-    private function sendEmailNotifications($discussion)
-    {
+    private function sendEmailNotifications($discussion){
+        
         $users = $discussion->users->except(Auth::user()->id);
+        
         foreach ($users as $user) {
-            Mail::to($user)->queue(new ChatterDiscussionUpdated($discussion));
-        }
+            //Mail::to($user)->queue(new ChatterDiscussionUpdated($discussion));
+			
+			$data = [
+				'type'  => 'notification',
+				'emailTo'   =>  $user->email,
+				//'emailFrom'   =>  $request->email,
+				'subject'  => 'Conversaciones Vivetix: Nuevo mensaje',
+				//'nameTo'  => $event->user->first_name,
+				'nameFrom'  => 'Vivetix',
+				'bodyIntro'  => 'Tienes una nueva contestación a tu pregunta',
+				//'message'  => '',
+				'actionText'  => 'Ir a la conversación',
+				'actionLink'  => url(config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$discussion->category->slug.'/'.$discussion->slug),
+				'unsubscribeUrl'  => url('/') .'/'.config('chatter.routes.home') .'/'.config('chatter.routes.discussion').'/'.$discussion->category->slug.'/'.$discussion->slug,
+				'unsubscribeText'  => trans('chatter::email.unsuscribe.link'),
+			];
+
+			Mail::send(new NotificationEmail($data));
+        }		
+        
     }
 
     /**

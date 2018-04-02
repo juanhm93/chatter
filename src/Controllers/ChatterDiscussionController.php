@@ -215,6 +215,8 @@ class ChatterDiscussionController extends Controller
             // Dynamically register markdown service provider
             \App::register('GrahamCampbell\Markdown\MarkdownServiceProvider');
         }
+        
+        $chatter_errors = config('chatter.errors');
 
         $discussion->increment('views');
         
