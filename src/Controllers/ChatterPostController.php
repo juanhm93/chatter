@@ -192,7 +192,7 @@ class ChatterPostController extends Controller
         }
 
         $post = Models::post()->find($id);
-        if (!Auth::guest() && (Auth::user()->id == $post->user_id)) {
+        if (!Auth::guest() && ((Auth::user()->id == $post->user_id) || auth()->user()->isRole('admin'))) {
             if ($post->markdown) {
                 $post->body = $request->body;
             } else {
@@ -235,7 +235,7 @@ class ChatterPostController extends Controller
     {
         $post = Models::post()->with('discussion')->findOrFail($id);
 
-        if ($request->user()->id !== (int) $post->user_id) {
+        if (($request->user()->id !== (int) $post->user_id) && !auth()->user()->isRole('admin')) {
             return redirect('/'.config('chatter.routes.home'))->with([
                 'chatter_alert_type' => 'danger',
                 'chatter_alert'      => trans('chatter::alert.danger.reason.destroy_post'),

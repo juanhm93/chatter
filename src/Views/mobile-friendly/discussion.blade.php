@@ -15,6 +15,33 @@
             }
         </style>
     @endif
+    
+    	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.min.css" />
+
+    
+	<style>
+	
+		#container { 
+			margin-top: 10px; 
+		}
+		
+		.mce-toolbar { 
+			border-top: 0px !important; 
+		}
+		    
+			
+		@media only screen and (min-width : 767px) {
+			#newDiscussion { 
+			margin-left: 110px; 
+			}
+			#container { 
+			margin-top: 40px; 
+			}
+		}
+		
+	
+	</style>
+	
 @stop
 
 
@@ -22,38 +49,38 @@
 
 <div id="chatter" class="discussion">
 
-	<div id="chatter_header" style="background-color:{{ $discussion->color }}">
+	<!--<div id="chatter_header" style="background-color:{{ $discussion->color }}">
 		<div class="container">
-			<a class="back_btn" href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-back"></i></a>
-			<h1>{{ $discussion->title }}</h1><span class="chatter_head_details"> @lang('chatter::messages.discussion.head_details')<a class="chatter_cat" href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a></span>
+			
 		</div>
-	</div>
+	</div>-->
+	@if(config('chatter.errors'))
+		@if(Session::has('chatter_alert') && $chatter_errors)
+			<div class="chatter-alert alert alert-{{ Session::get('chatter_alert_type') }}">
+				<div class="container">
+					<strong><i class="chatter-alert-{{ Session::get('chatter_alert_type') }}"></i> {{ Config::get('chatter.alert_messages.' . Session::get('chatter_alert_type')) }}</strong>
+					{{ Session::get('chatter_alert') }}
+					<i class="chatter-close"></i>
+				</div>
+			</div>
+			<div class="chatter-alert-spacer"></div>
+		@endif
 
-	@if(Session::has('chatter_alert'))
-		<div class="chatter-alert alert alert-{{ Session::get('chatter_alert_type') }}">
-			<div class="container">
-	        	<strong><i class="chatter-alert-{{ Session::get('chatter_alert_type') }}"></i> {{ Config::get('chatter.alert_messages.' . Session::get('chatter_alert_type')) }}</strong>
-	        	{{ Session::get('chatter_alert') }}
-	        	<i class="chatter-close"></i>
-	        </div>
-	    </div>
-	    <div class="chatter-alert-spacer"></div>
+		@if (count($errors) > 0)
+			<div class="chatter-alert alert alert-danger">
+				<div class="container">
+					<p><strong><i class="chatter-alert-danger"></i> @lang('chatter::alert.danger.title')</strong> @lang('chatter::alert.danger.reason.errors')</p>
+					<ul>
+						@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+						@endforeach
+					</ul>
+				</div>
+			</div>
+		@endif
 	@endif
 
-	@if (count($errors) > 0)
-	    <div class="chatter-alert alert alert-danger">
-	    	<div class="container">
-	    		<p><strong><i class="chatter-alert-danger"></i> @lang('chatter::alert.danger.title')</strong> @lang('chatter::alert.danger.reason.errors')</p>
-		        <ul>
-		            @foreach ($errors->all() as $error)
-		                <li>{{ $error }}</li>
-		            @endforeach
-		        </ul>
-		    </div>
-	    </div>
-	@endif
-
-	<div class="container margin-top">
+	<div id="container" class="container">
 
 	    <div class="row">
 
@@ -63,90 +90,141 @@
                 <div class="col-md-3 left-column">
                     <!-- SIDEBAR -->
                     <div class="chatter_sidebar">
-                        <button class="btn btn-primary" id="new_discussion_btn"><i class="chatter-new"></i>@lang('chatter::messages.discussion.new')</button>
-                        <a href="/{{ Config::get('chatter.routes.home') }}"><i class="chatter-bubble"></i>@lang('chatter::messages.discussion.all')</a>
-                        <ul class="nav nav-pills nav-stacked">
+                        <button class="btn btn-primary hidden-xs hidden-sm" id="new_discussion_btn"><i class="chatter-new"></i>@lang('chatter::messages.discussion.new')</button>
+                        <ul class="nav nav-pills nav-stacked" style="margin-top:10px;">
+                        	<li><span class="visible-xs visible-sm"><a href="#" style="padding-left: 10px;" id="new_discussion_btn_mobile"><i class="chatter-new"></i>@lang('chatter::messages.discussion.new')</a></span></li>
+                        	<li><a href="/{{ Config::get('chatter.routes.home') }}" style="padding-left: 5px;"><i class="chatter-bubble"></i> @lang('chatter::messages.words.all')</a></li>
                             <?php $categories = DevDojo\Chatter\Models\Models::category()->all(); ?>
                             @foreach($categories as $category)
                                 <li><a href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.category') }}/{{ $category->slug }}"><div class="chatter-box" style="background-color:{{ $category->color }}"></div> {{ $category->name }}</a></li>
                             @endforeach
                         </ul>
                     </div>
+                    <hr class="visible-xs visible-sm">
                     <!-- END SIDEBAR -->
                 </div>
-                <div class="col-md-9 right-column">
+                <div class="col-xs-12 col-md-9 right-column">
             @endif
+				
+					<div class="table">
+						<table class="table">
+							<tbody>
+								<tr style="background-color: #f9f9f9;">
+									<td colspan="3">
+										<h2 style="padding-left: 45px; margin-top: 0px;">{{ $discussion->title }}</h2>
+										<span class="chatter_head_details" style="padding-left: 45px;"> @lang('chatter::messages.discussion.head_details')
+											<a class="chatter_cat" href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}; border-radius: 30px; font-size: 12px; padding: 3px 7px; display: inline; color: #fff; position: relative; top: -2px;">{{ $discussion->category->name }}</a>
+										</span>
+									</td>
+								</tr>
+								@forelse($posts as $post)
+									<tr class="discussions no-bg">
+										<td class="hidden-xs">
+											@if(Config::get('chatter.user.avatar_image_database_field'))
 
-				<div class="conversation">
-	                <ul class="discussions no-bg" style="display:block;">
-	                	@foreach($posts as $post)
-	                		<li data-id="{{ $post->id }}" data-markdown="{{ $post->markdown }}">
-		                		<span class="chatter_posts">
-		                			@if(!Auth::guest() && (Auth::user()->id == $post->user->id))
-		                				<div id="delete_warning_{{ $post->id }}" class="chatter_warning_delete">
-		                					<i class="chatter-warning"></i>@lang('chatter::messages.response.confirm')
-		                					<button class="btn btn-sm btn-danger pull-right delete_response">@lang('chatter::messages.response.yes_confirm')</button>
-		                					<button class="btn btn-sm btn-default pull-right">@lang('chatter::messages.response.no_confirm')</button>
-		                				</div>
-			                			<div class="chatter_post_actions">
-			                				<p class="chatter_delete_btn">
-			                					<i class="chatter-delete"></i> @lang('chatter::messages.words.delete')
-			                				</p>
-			                				<p class="chatter_edit_btn">
-			                					<i class="chatter-edit"></i> @lang('chatter::messages.words.edit')
-			                				</p>
-			                			</div>
-			                		@endif
-			                		<div class="chatter_avatar">
-					        			@if(Config::get('chatter.user.avatar_image_database_field'))
+												<?php $db_field = Config::get('chatter.user.avatar_image_database_field'); ?>
+												<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
+												@if( (substr($post->user->{$db_field}, 0, 7) == 'http://') || (substr($post->user->{$db_field}, 0, 8) == 'https://') )
+													<img style="width: 60px; height: 60px; border-radius: 50%;" src="{{ $post->user->{$db_field}  }}">
+												@elseif($post->user->{$db_field})
+													<img style="width: 60px; height: 60px; border-radius: 50%;" src="{{ Config::get('chatter.user.relative_url_to_image_assets') . $post->user->{$db_field}  }}">
+												@else
+													<img style="width: 60px; height: 60px; border-radius: 50%;" src="{{ Config::get('chatter.user.if_empty_avatar_img_url') }}">
+												@endif
 
-					        				<?php $db_field = Config::get('chatter.user.avatar_image_database_field'); ?>
+											@else
 
-					        				<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
-					        				@if( (substr($post->user->{$db_field}, 0, 7) == 'http://') || (substr($post->user->{$db_field}, 0, 8) == 'https://') )
-					        					<img src="{{ $post->user->{$db_field}  }}">
-					        				@else
-					        					<img src="{{ Config::get('chatter.user.relative_url_to_image_assets') . $post->user->{$db_field}  }}">
-					        				@endif
+												<span class="chatter_avatar_circle" style="background-color:#<?= \DevDojo\Chatter\Helpers\ChatterHelper::stringToColorCode($discussion->user->email) ?>">
+													{{ strtoupper(substr($discussion->user->email, 0, 1)) }}
+												</span>
 
-					        			@else
-					        				<span class="chatter_avatar_circle" style="background-color:#<?= \DevDojo\Chatter\Helpers\ChatterHelper::stringToColorCode($post->user->email) ?>">
-					        					{{ ucfirst(substr($post->user->email, 0, 1)) }}
-					        				</span>
-					        			@endif
-					        		</div>
+											@endif
+										</td>
+										<td id="content_{{ $post->id }}" data-id="{{ $post->id }}" data-markdown="{{ $post->markdown }}" style="width: 100%;">
+											<!--<a class="discussion_list" href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}"><h4 class="chatter_middle_title" style="margin-top: 0px;">{{ $discussion->title }} </h4></a>
+											<span class="chatter_middle_details">@lang('chatter::messages.discussion.posted_by') <span data-href="/user">{{ ucfirst($discussion->user->{Config::get('chatter.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>-->
+										
+											<div class="chatter_middle">
+												<span class="visible-xs">
+													<span class="chatter_middle_details">
+														<?php $db_field = Config::get('chatter.user.avatar_image_database_field'); ?>
 
-					        		<div class="chatter_middle">
-					        			<span class="chatter_middle_details"><a href="{{ \DevDojo\Chatter\Helpers\ChatterHelper::userLink($post->user) }}">{{ ucfirst($post->user->{Config::get('chatter.user.database_field_with_user_name')}) }}</a> <span class="ago chatter_middle_details">{{ \Carbon\Carbon::createFromTimeStamp(strtotime($post->created_at))->diffForHumans() }}</span></span>
-					        			<div class="chatter_body">
+														<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
+														@if( (substr($post->user->{$db_field}, 0, 7) == 'http://') || (substr($post->user->{$db_field}, 0, 8) == 'https://') )
+															<img style="width: 20px; height: 20px; border-radius: 50%;" src="{{ $post->user->{$db_field}  }}">
+														@elseif($post->user->{$db_field})
+															<img style="width: 20px; height: 20px; border-radius: 50%;" src="{{ Config::get('chatter.user.relative_url_to_image_assets') . $post->user->{$db_field}  }}">
+														@else
+															<img style="width: 20px; height: 20px; border-radius: 50%;" src="{{ Config::get('chatter.user.if_empty_avatar_img_url') }}">
+														@endif
+														<a href="{{ \DevDojo\Chatter\Helpers\ChatterHelper::userLink($post->user) }}">{{ ucfirst($post->user->{Config::get('chatter.user.database_field_with_user_name')}) }}</a> <span class="ago chatter_middle_details">{{ \Carbon\Carbon::createFromTimeStamp(strtotime($post->created_at))->diffForHumans() }}</span></span>
+													</span>
+												</span>
+												
+												<span class="hidden-xs">
+													<span class="chatter_middle_details">
+														<a href="{{ \DevDojo\Chatter\Helpers\ChatterHelper::userLink($post->user) }}">{{ ucfirst($post->user->{Config::get('chatter.user.database_field_with_user_name')}) }}</a> 
+														<span class="ago">
+															{{ \Carbon\Carbon::createFromTimeStamp(strtotime($post->created_at))->diffForHumans() }}
+														</span>
+													</span>
+												</span>
+												<div class="chatter_body">
 
-					        				@if($post->markdown)
-					        					<pre class="chatter_body_md">{{ $post->body }}</pre>
-					        					<?= \DevDojo\Chatter\Helpers\ChatterHelper::demoteHtmlHeaderTags( GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ) ); ?>
-					        					<!--?= GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ); ?-->
-					        				@else
-					        					<?= $post->body; ?>
-					        				@endif
+													@if($post->markdown)
+														<pre class="chatter_body_md">{{ $post->body }}</pre>
+														<?= \DevDojo\Chatter\Helpers\ChatterHelper::demoteHtmlHeaderTags( GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ) ); ?>
+														<!--?= GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ); ?-->
+													@else
+														<?= $post->body; ?>
+													@endif
 
-					        			</div>
-					        		</div>
+												</div>
+											</div>
+										
+											@if(!Auth::guest() && ((Auth::user()->id == $post->user->id) || auth()->user()->isRole('admin')))
+											<!-- Post actions -->
+											<div class="chatter_post_actions">
+												<a class="chatter_delete_btn" href="#/">
+													<i class="chatter-delete"></i> @lang('chatter::messages.words.delete')
+												</a>
+												<a class="chatter_edit_btn" href="#/">
+													<i class="chatter-edit"></i> @lang('chatter::messages.words.edit')
+												</a>
+											</div>
+										
+											<!-- Actions dialog -->
+												<div id="delete_warning_{{ $post->id }}" data-id="{{ $post->id }}" class="chatter_warning_delete hide alert alert-danger">
+													<i class="chatter-warning"></i>@lang('chatter::messages.response.confirm')
+													<button class="btn btn-sm btn-danger pull-right delete_response">@lang('chatter::messages.response.yes_confirm')</button>
+													<button class="btn btn-sm btn-default pull-right">@lang('chatter::messages.response.no_confirm')</button>
+												</div>
+											@endif
+									
+										</td>						
+									</tr>
 
-					        		<div class="chatter_clear"></div>
-				        		</span>
-		                	</li>
-	                	@endforeach
-
-
-	                </ul>
-	            </div>
-
-	            <div id="pagination">{{ $posts->links() }}</div>
+								@empty
+									<tr>
+										<td style="display: none">-</td>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+									</tr>
+									@endforelse
+							</tbody>
+						</table>
+					</div>
+					<div id="pagination">
+						{{ $posts->links() }}
+					</div>
 
 	            @if(!Auth::guest())
 
-	            	<div id="new_response">
+	            	<div id="" class="row">
 
-	            		<div class="chatter_avatar">
+	            		<div class="chatter_avatar hidden-xs col-sm-2" style="margin-left: 5px;">
 		        			@if(Config::get('chatter.user.avatar_image_database_field'))
 
 		        				<?php $db_field = Config::get('chatter.user.avatar_image_database_field'); ?>
@@ -154,8 +232,10 @@
 		        				<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
 		        				@if( (substr(Auth::user()->{$db_field}, 0, 7) == 'http://') || (substr(Auth::user()->{$db_field}, 0, 8) == 'https://') )
 		        					<img src="{{ Auth::user()->{$db_field}  }}">
-		        				@else
+		        				@elseif(Auth::user()->{$db_field})
 		        					<img src="{{ Config::get('chatter.user.relative_url_to_image_assets') . Auth::user()->{$db_field}  }}">
+		        				@else
+		        					<img src="{{ Config::get('chatter.user.if_empty_avatar_img_url')  }}">
 		        				@endif
 
 		        			@else
@@ -165,7 +245,7 @@
 		        			@endif
 		        		</div>
 
-			            <div id="new_discussion">
+			            <div id="newDiscussion" class="col-xs-12 col-sm-10" style="border: 1px solid #f1f5ff;">
 
 
 					    	<div class="chatter_loader dark" id="new_discussion_loader">
@@ -188,6 +268,7 @@
 
 						        <input type="hidden" name="_token" id="csrf_token_field" value="{{ csrf_token() }}">
 						        <input type="hidden" name="chatter_discussion_id" value="{{ $discussion->id }}">
+						        <input type="hidden" name="post_type" value="subpost">
 						    </form>
 
 						</div><!-- #new_discussion -->
@@ -274,8 +355,8 @@
 
                 <div id="new_discussion_footer">
                     <input type='text' id="color" name="color" /><span class="select_color_text">@lang('chatter::messages.editor.tinymce_placeholder')</span>
-                    <button id="submit_discussion" class="btn btn-success pull-right"><i class="chatter-new"></i> Create {{ Config::get('chatter.titles.discussion') }}</button>
-                    <a href="/{{ Config::get('chatter.routes.home') }}" class="btn btn-default pull-right" id="cancel_discussion">Cancel</a>
+                    <button id="submit_discussion" class="btn btn-success pull-right"><i class="chatter-new"></i>@lang('chatter::messages.discussion.create')</button>
+                    <a href="/{{ Config::get('chatter.routes.home') }}" class="btn btn-default pull-right" id="cancel_discussion">@lang('chatter::messages.words.cancel')</a>
                     <div style="clear:both"></div>
                 </div>
             </form>
@@ -322,7 +403,7 @@
 
 @if(Config::get('chatter.sidebar_in_discussion_view'))
     <script src="/vendor/devdojo/chatter/assets/vendor/spectrum/spectrum.js"></script>
-    <script src="/vendor/devdojo/chatter/assets/js/chatter.js"></script>
+    <!--<script src="/vendor/devdojo/chatter/assets/js/chatter.js"></script>-->
 @endif
 
 <script>
@@ -331,9 +412,10 @@
 		var simplemdeEditors = [];
 
 		$('.chatter_edit_btn').click(function(){
-			parent = $(this).parents('li');
-			parent.addClass('editing');
+			parent = $(this).parents('td');
+			//parent.addClass('editing');
 			id = parent.data('id');
+			$('#content_'+id+' .chatter_middle_details, .chatter_body, .chatter_post_actions').addClass('hide');
 			markdown = parent.data('markdown');
 			container = parent.find('.chatter_middle');
 
@@ -365,30 +447,32 @@
 
 		});
 
-		$('.discussions li').on('click', '.cancel_chatter_edit', function(e){
+		$('.discussions td').on('click', '.cancel_chatter_edit', function(e){
 			post_id = $(e.target).data('id');
 			markdown = $(e.target).data('markdown');
-			parent_li = $(e.target).parents('li');
+			parent_td = $(e.target).parents('td');
 			parent_actions = $(e.target).parent('.chatter_update_actions');
 			if(!markdown){
                 @if($chatter_editor == 'tinymce' || empty($chatter_editor))
                     tinymce.remove('#post-edit-' + post_id);
                 @elseif($chatter_editor == 'trumbowyg')
-                    $(e.target).parents('li').find('.trumbowyg').fadeOut();
+                    $(e.target).parents('td').find('.trumbowyg').fadeOut();
                 @endif
 			} else {
-				$(e.target).parents('li').find('.editor-toolbar').remove();
-				$(e.target).parents('li').find('.editor-preview-side').remove();
-				$(e.target).parents('li').find('.CodeMirror').remove();
+				$(e.target).parents('td').find('.editor-toolbar').remove();
+				$(e.target).parents('td').find('.editor-preview-side').remove();
+				$(e.target).parents('td').find('.CodeMirror').remove();
 			}
 
 			$('#post-edit-' + post_id).remove();
 			parent_actions.remove();
 
-			parent_li.removeClass('editing');
+			//parent_td.removeClass('editing');
+			$('#content_'+id+' .chatter_middle_details, .chatter_body, .chatter_post_actions').removeClass('hide');
+
 		});
 
-		$('.discussions li').on('click', '.update_chatter_edit', function(e){
+		$('.discussions td').on('click', '.update_chatter_edit', function(e){
 			post_id = $(e.target).data('id');
 			markdown = $(e.target).data('markdown');
 
@@ -414,19 +498,19 @@
 		// ******************************
 
 		$('.chatter_delete_btn').click(function(){
-			parent = $(this).parents('li');
+			parent = $(this).parent().next();
 			parent.addClass('delete_warning');
 			id = parent.data('id');
-			$('#delete_warning_' + id).show();
+			$('#delete_warning_' + id).removeClass('hide');
 		});
 
 		$('.chatter_warning_delete .btn-default').click(function(){
-			$(this).parent('.chatter_warning_delete').hide();
-			$(this).parents('li').removeClass('delete_warning');
+			$(this).parent('.chatter_warning_delete').addClass('hide');
+			$(this).parent().prev().removeClass('delete_warning');
 		});
 
 		$('.delete_response').click(function(){
-			post_id = $(this).parents('li').data('id');
+			post_id = $(this).parent().data('id');
 			$.form('/{{ Config::get('chatter.routes.home') }}/posts/' + post_id, { _token: '{{ csrf_token() }}', _method: 'DELETE'}, 'POST').submit();
 		});
 
@@ -435,7 +519,7 @@
             $('.chatter-close, #cancel_discussion').click(function(){
                 $('#new_discussion_in_discussion_view').slideUp();
             });
-            $('#new_discussion_btn').click(function(){
+            $('#new_discussion_btn, #new_discussion_btn_mobile').click(function(){
                 @if(Auth::guest())
                     window.location.href = "/{{ Config::get('chatter.routes.home') }}/login";
                 @else
@@ -455,14 +539,28 @@
                 }
             });
 
-            @if (count($errors) > 0)
+            @if (count($errors) > 0 && old('post_type') != 'subpost')
                 $('#new_discussion_in_discussion_view').slideDown();
                 $('#title').focus();
             @endif
+            
+
         @endif
 
 	});
 </script>
 
+<script src="{{ url('/vendor/devdojo/chatter/assets/js/chatter.js') }}"></script>
 
+<script>
+	//get the number of `<script>` elements that have the correct `src` attribute
+	var len = $('script').filter(function () {
+		return ($(this).attr('src') == '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js');
+	}).length;
+
+	//if there are no scripts that match, the load it
+	if (len === 0) {
+		$.getScript('//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js');
+	}
+</script>
 @stop
