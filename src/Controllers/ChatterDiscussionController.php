@@ -208,7 +208,8 @@ class ChatterDiscussionController extends Controller
             return redirect(config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$discussion_category->slug.'/'.$discussion->slug);
         }
         $posts = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->orderBy(config('chatter.order_by.posts.order'), config('chatter.order_by.posts.by'))->paginate(10);
-
+		$first_post = $posts->first()->body;
+		
         $chatter_editor = config('chatter.editor');
 
         if ($chatter_editor == 'simplemde') {
@@ -220,7 +221,7 @@ class ChatterDiscussionController extends Controller
 
         $discussion->increment('views');
         
-        return view('chatter::discussion', compact('discussion', 'posts', 'chatter_editor'));
+        return view('chatter::discussion', compact('discussion', 'posts', 'chatter_editor', 'first_post'));
     }
 
     /**
