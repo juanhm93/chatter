@@ -50,6 +50,7 @@ function initializeNewTinyMCE(id){
         statusbar: false,
         height : '300',
         content_css : '/vendor/devdojo/chatter/assets/css/chatter.css',
-        template_popup_height: 380
+        template_popup_height: 380,
+		default_link_target: '_blank'
     });
 }

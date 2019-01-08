@@ -6,6 +6,7 @@ use Auth;
 use DevDojo\Chatter\Helpers\ChatterHelper as Helper;
 use DevDojo\Chatter\Models\Models;
 use Illuminate\Routing\Controller as Controller;
+use Illuminate\Support\Facades\URL;
 
 class ChatterController extends Controller
 {
@@ -45,14 +46,16 @@ class ChatterController extends Controller
     public function login()
     {
         if (!Auth::check()) {
-            return \Redirect::to('/'.config('chatter.routes.login').'?redirect='.config('chatter.routes.home'))->with('flash_message', 'Please create an account before posting.');
+        	return \Redirect::to(URL::previous() . "#loginModal");
+            //return \Redirect::to('/'.config('chatter.routes.login').'?redirect='.config('chatter.routes.home'))->with('flash_message', 'Please create an account before posting.');
         }
     }
 
     public function register()
     {
         if (!Auth::check()) {
-            return \Redirect::to('/'.config('chatter.routes.register').'?redirect='.config('chatter.routes.home'))->with('flash_message', 'Please register for an account.');
+        	return \Redirect::to(URL::previous() . "#loginModal");
+            //return \Redirect::to('/'.config('chatter.routes.register').'?redirect='.config('chatter.routes.home'))->with('flash_message', 'Please register for an account.');
         }
     }
 }
