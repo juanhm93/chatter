@@ -1,5 +1,7 @@
 @extends(Config::get('chatter.master_file_extend'))
 
+@section('title', 'Foro Vivetix | Donde los organizadores de eventos se reúnen, aprenden y comparten' )
+
 @section(Config::get('chatter.yields.head'))
     <link href="{{ url('/vendor/devdojo/chatter/assets/vendor/spectrum/spectrum.css') }}" rel="stylesheet">
 	<link href="{{ url('/vendor/devdojo/chatter/assets/css/chatter.css') }}" rel="stylesheet">
@@ -13,6 +15,9 @@
 			}
 		</style>
 	@endif
+	<meta name="description" content="{{substr(strip_tags($first_post), 0, 250)}}...">
+	<meta property="og:site_name" content="Foro Vivetix">
+	<meta property="og:title" content="Foro Vivetix | Donde los organizadores de eventos se reúnen, aprenden y comparten">
 @stop
 
 @section('content')

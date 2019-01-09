@@ -1,5 +1,35 @@
 @extends(Config::get('chatter.master_file_extend'))
 
+@section('title', $discussion->title.' | Foro Vivetix')
+
+	<meta name="description" content="{{substr(strip_tags($first_post), 0, 250)}}...">
+
+	<meta property="og:site_name" content="Foro Vivetix">
+	<meta property="og:title" content="{{$discussion->title}} | Foro Vivetix">
+	
+	@php 
+		$haveImg = preg_match_all( '@src="([^"]+)"@' , $first_post, $result );
+	@endphp
+		
+	@if ($haveImg)
+		<meta property="og:image" itemprop="image" content="{{ $result[1][0] }}"/>
+	@else
+		<meta property="og:image" content="{{ 'https:'.cdn('/img/web/logo-squared.png')}}"/>
+	@endif
+	<meta property="og:description" content="{{substr(strip_tags($first_post), 0, 250)}}...">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="{{ url('/'.Config::get('chatter.routes.home').'/'.Config::get('chatter.routes.discussion').'/'.$discussion->category->slug).'/'.$discussion->slug  }}"> 
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@vivetix" />
+	<meta name="twitter:title" content="{{$discussion->title}}" />
+	<meta name="twitter:description" content="{{substr(strip_tags($first_post), 0, 150)}}..." />
+	@if ($haveImg)
+		<meta property="twitter:image" content="{{ $result[1][0] }}"/>
+	@else
+		<meta property="twitter:image" content="{{ 'https:'.cdn('/img/web/logo-squared.png')}}"/>
+	@endif
+
 @section(Config::get('chatter.yields.head'))
     @if(Config::get('chatter.sidebar_in_discussion_view'))
         <link href="{{ url('/vendor/devdojo/chatter/assets/vendor/spectrum/spectrum.css') }}" rel="stylesheet">
