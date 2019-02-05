@@ -4,6 +4,7 @@ namespace DevDojo\Chatter\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DOMDocument;
 
 class Post extends Model
 {
@@ -22,5 +23,19 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(config('chatter.user.namespace'));
+    }
+
+    public function getBodyAttribute($value)
+    {
+        $doc = new DOMDocument();
+        $doc->loadHTML("<?xml encoding=\"utf-8\" ?><div id='_content'>$value</div>");
+        $list = $doc->getElementsByTagName('img');
+        foreach ($list as $i) {
+            if ($src = $i->getAttribute('src')) {
+                $i->removeAttribute('src');
+                $i->setAttribute('data-src', $src);
+            }
+        }
+        return $doc->saveHTML($doc->getElementById('_content'));
     }
 }
