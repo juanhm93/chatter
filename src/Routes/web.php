@@ -14,6 +14,9 @@ Route::get('/foro/post/blog/alternativas-a-ticketea-y-eventbrite', function () {
 Route::get('/foro/post/blog/como-organizar-un-concierto-y-vender-entradas', function () {
 	return redirect('/foro/post/blog/organizar-promocionar-concierto', 301);
 });
+Route::get('/foro/post/blog/organizar-promocionar-concierto', function () {
+	return redirect('/foro/post/blog/como-promocionar-concierto-musica', 301);
+});
 Route::get('/foro/post/blog/el-mejor-software-y-mejores-plataformas-de-venta-de-entradas-por-internet', function () {
 	return redirect('/foro/post/blog/software-plataformas-venta-entradas-internet', 301);
 });
@@ -35,6 +38,16 @@ Route::get('/foro/post/blog/como-organizar-un-evento-por-internet', function () 
 Route::get('/foro/post/blog/la-mejor-alternativa-para-la-venta-de-entradas-online', function () {
 	return redirect('/foro/post/blog/alternativa-venta-entradas-online', 301);
 });
+Route::get('/foro/post/preguntas/como-acertar-en-la-fecha-del-evento', function () {
+	return redirect('/foro/post/blog/elegir-mejor-fecha-evento', 301);
+});
+Route::get('/foro/post/preguntas/que-tipo-de-comida-llevar-a-una-fiesta-o-evento', function () {
+	return redirect('/foro/post/blog/tipo-comida-llevar-fiesta-evento', 301);
+});
+Route::get('/foro/post/preguntas/ventajas-de-los-codigos-qr', function () {
+	return redirect('/foro/post/blog/crear-qr-gratis-eventos-control-asistencia-acceso-acreditacion', 301);
+});
+
 
 /**
  * Helpers.
