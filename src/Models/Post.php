@@ -32,7 +32,7 @@ class Post extends Model
         $list = $doc->getElementsByTagName('img');
         foreach ($list as $i) {
             if ($src = $i->getAttribute('src')) {
-                $i->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
+                $i->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
                 $i->setAttribute('data-src', $src);
                 $class =  $i->getAttribute('class');
                 $class = $class ? $class : '';
