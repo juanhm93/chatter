@@ -36,7 +36,7 @@ class Post extends Model
                 $i->setAttribute('data-src', $src);
                 $class =  $i->getAttribute('class');
                 $class = $class ? $class : '';
-                $img->setAttribute('class', "$class lazy");
+                $i->setAttribute('class', "$class lazy");
                 $i->setAttribute('data-src', $src);
             }
         }
