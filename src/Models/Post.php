@@ -34,6 +34,10 @@ class Post extends Model
             if ($src = $i->getAttribute('src')) {
                 $i->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                 $i->setAttribute('data-src', $src);
+                $class =  $i->getAttribute('class');
+                $class = $class ? $class : '';
+                $img->setAttribute('class', "$class lazy");
+                $i->setAttribute('data-src', $src);
             }
         }
         return $doc->saveHTML($doc->getElementById('_content'));
