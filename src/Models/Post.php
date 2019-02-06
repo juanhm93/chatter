@@ -32,7 +32,7 @@ class Post extends Model
         $list = $doc->getElementsByTagName('img');
         foreach ($list as $i) {
             if ($src = $i->getAttribute('src')) {
-                $i->removeAttribute('src');
+                $i->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                 $i->setAttribute('data-src', $src);
             }
         }
