@@ -1,55 +1,5 @@
 <?php
 /**
- * Redirects.
- */
-Route::get('/foro/post/blog/presentacion-de-vivetix-venta-de-entradas-para-organizadores-de-eventos', function () {
-	return redirect('/foro/post/preguntas-frecuentes/que-es-y-que-ofrece-vivetix', 301);
-});
-Route::get('/foro/post/blog/pasos-para-cumplir-el-rgdp-antes-lopd-proteccion-de-datos-en-tus-eventos', function () {
-	return redirect('/foro/post/blog/cumplir-rgdp-lopd-eventos', 301);
-});
-Route::get('/foro/post/blog/alternativas-a-ticketea-y-eventbrite', function () {
-	return redirect('/foro/post/blog/alternativas-ticketea-eventbrite', 301);
-});
-Route::get('/foro/post/blog/como-organizar-un-concierto-y-vender-entradas', function () {
-	return redirect('/foro/post/blog/organizar-promocionar-concierto', 301);
-});
-Route::get('/foro/post/blog/organizar-promocionar-concierto', function () {
-	return redirect('/foro/post/blog/como-promocionar-concierto-musica', 301);
-});
-Route::get('/foro/post/blog/el-mejor-software-y-mejores-plataformas-de-venta-de-entradas-por-internet', function () {
-	return redirect('/foro/post/blog/software-plataformas-venta-entradas-internet', 301);
-});
-Route::get('/foro/post/blog/alternativas-a-ticketea-para-ongs-o-eventos-sin-animo-de-lucro', function () {
-	return redirect('/foro/post/blog/alternativas-ticketea-ongs-fundaciones-eventos-beneficos', 301);
-});
-Route::get('/foro/post/blog/como-recaudar-fondos-para-una-ong-o-evento-benefico', function () {
-	return redirect('/foro/post/blog/como-recaudar-fondos-ong-evento-benefico', 301);
-});
-Route::get('/foro/post/blog/como-puedo-recompensar-a-los-que-den-a-conocer-mi-evento', function () {
-	return redirect('/foro/post/blog/como-recompensar-promotores', 301);
-});
-Route::get('/foro/post/blog/ideas-como-promocionar-tu-evento-por-internet', function () {
-	return redirect('/foro/post/blog/ideas-como-promocionar-evento-internet', 301);
-});
-Route::get('/foro/post/blog/como-organizar-un-evento-por-internet', function () {
-	return redirect('/foro/post/blog/como-organizar-evento-internet', 301);
-});
-Route::get('/foro/post/blog/la-mejor-alternativa-para-la-venta-de-entradas-online', function () {
-	return redirect('/foro/post/blog/alternativa-venta-entradas-online', 301);
-});
-Route::get('/foro/post/preguntas/como-acertar-en-la-fecha-del-evento', function () {
-	return redirect('/foro/post/blog/elegir-mejor-fecha-evento', 301);
-});
-Route::get('/foro/post/preguntas/que-tipo-de-comida-llevar-a-una-fiesta-o-evento', function () {
-	return redirect('/foro/post/blog/tipo-comida-llevar-fiesta-evento', 301);
-});
-Route::get('/foro/post/preguntas/ventajas-de-los-codigos-qr', function () {
-	return redirect('/foro/post/blog/crear-qr-gratis-eventos-control-asistencia-acceso-acreditacion', 301);
-});
-
-
-/**
  * Helpers.
  */
 
