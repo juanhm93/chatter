@@ -1,15 +1,22 @@
 {
-    "name": "tronne/chatter",
+    "name": "ashrey/chatter-vivetix",
     "description": "A simple forum package for your laravel app",
     "authors": [
         {
             "name": "Tony Lea",
             "email": "tony@devdojo.com"
-        }
+        },
+        {
+            "company": "Tecnofalls",
+            "email": "alberroteran@gmail.com",
+            "url": "http://tecnofalls.com",
+            "role": "Developer"
+        } 
     ],
     "require": {
-        "luketowers/purifier": "~3.0"
+        "mews/purifier": "~3.0"
     },
+
     "require-dev": {
         "illuminate/cache": "~6.0.*",
         "illuminate/console": "~6.0.*",
