@@ -7,10 +7,8 @@
             "email": "tony@devdojo.com"
         },
         {
-            "company": "Tecnofalls",
             "name": "Alberto Berroten",
             "email": "alberroteran@gmail.com",
-            "url": "http://tecnofalls.com",
             "role": "Developer"
         }
     ],
@@ -25,15 +23,16 @@
         "phpunit/phpunit": "^8.0"
     },
     "autoload": {
-	    "psr-4": {
-	      "DevDojo\\Chatter\\": "/src"
-		}
-	},
+        "psr-4": {
+          "DevDojo\\Chatter\\": "/src"
+        }
+    },
     "autoload-dev": {
         "classmap": [
             "tests/TestCase.php"
         ]
     },
+    "license": "MIT",
     "extra": {
         "laravel": {
             "providers": [
