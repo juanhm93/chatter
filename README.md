@@ -1,4 +1,6 @@
-<p align="center"><img width="300" src="https://raw.githubusercontent.com/thedevdojo/chatter/master/public/assets/images/logo.png"></p>
+<p align="center">
+    <img width="300" src="https://raw.githubusercontent.com/thedevdojo/chatter/master/public/assets/images/logo.png">
+</p>
 
 <p align="center">
 <a href="https://travis-ci.org/thedevdojo/chatter"><img src="https://travis-ci.org/thedevdojo/chatter.svg?branch=master" alt="Build Status"></a>
@@ -9,6 +11,8 @@
 </p>
 
 # Laravel Forum Package - Chatter
+
+This version is compatible with Laravel 6+
 
 ### Installation
 

@@ -11,7 +11,7 @@
             "email": "alberroteran@gmail.com",
             "url": "http://tecnofalls.com",
             "role": "Developer"
-        } 
+        }
     ],
     "require": {
         "mews/purifier": "~3.0"
