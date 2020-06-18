@@ -19,8 +19,8 @@
     },
 
     "require-dev": {
-        "illuminate/cache": "^6.0.*",
-        "illuminate/console": "^6.0.*",
+        "illuminate/cache": "^6.0",
+        "illuminate/console": "^6.0",
         "mockery/mockery": "^1.4.0",
         "phpunit/phpunit": "^8.0"
     },
