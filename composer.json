@@ -1,6 +1,6 @@
 {
     "name": "ashrey/chatter-vivetix",
-    "description": "A simple forum package for your laravel app",
+   "description": "A simple forum package for your laravel 6+ app ",
     "authors": [
         {
             "name": "Tony Lea",
@@ -8,6 +8,7 @@
         },
         {
             "company": "Tecnofalls",
+            "name": "Alberto Berroten",
             "email": "alberroteran@gmail.com",
             "url": "http://tecnofalls.com",
             "role": "Developer"
