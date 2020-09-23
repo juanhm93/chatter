@@ -4,6 +4,7 @@ namespace DevDojo\Chatter\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Masterminds\HTML5;
 use DOMDocument;
 
 class Post extends Model
@@ -40,12 +41,13 @@ class Post extends Model
         }
     }
 
-    public function getBodyAttribute($value)
+    public function setBodyAttribute($value)
     {
-        $doc = new DOMDocument();
-        $doc->loadHTML("<?xml encoding=\"utf-8\" ?><div id='_content'>$value</div>");
+        $html = "<html><head><title>TEST</title></head><body><div id='_content'>$value</div></body></html>";
+        $html5 = new HTML5();
+        $doc = $html5->loadHTML($html);
         $this->defer($doc, 'img', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
         $this->defer($doc, 'iframe', 'about:blank');
-        return $doc->saveHTML($doc->getElementById('_content'));
+        $this->attributes['body'] = $html5->saveHTML($doc->getElementById('_content'));
     }
 }

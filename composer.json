@@ -13,7 +13,8 @@
         }
     ],
     "require": {
-        "mews/purifier": "~3.0"
+        "mews/purifier": "~3.0",
+        "masterminds/html5": "2.*"
     },
 
     "require-dev": {
