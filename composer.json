@@ -13,6 +13,7 @@
         }
     ],
     "require": {
+        "ebethus/laravel-spamscore": "dev-master",
         "mews/purifier": "~3.0",
         "masterminds/html5": "2.*"
     },
