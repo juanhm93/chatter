@@ -17,6 +17,8 @@ use Validator;
 
 use App\Mail\NotificationEmail;
 
+use DevDojo\Chatter\Requests\PostRequest;
+
 class ChatterPostController extends Controller
 {
     /**
@@ -26,16 +28,6 @@ class ChatterPostController extends Controller
      */
     public function index(Request $request)
     {
-        /*$total = 10;
-        $offset = 0;
-        if ($request->total) {
-            $total = $request->total;
-        }
-        if ($request->offset) {
-            $offset = $request->offset;
-        }
-        $posts = Models::post()->with('user')->orderBy('created_at', 'DESC')->take($total)->offset($offset)->get();*/
-
         // This is another unused route
         // we return an empty array to not expose user data to the public
         return response()->json([]);
@@ -50,10 +42,7 @@ class ChatterPostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        Event::dispatch(new ChatterBeforeNewResponse($request, $validator));
-        if (function_exists('chatter_before_new_response')) {
-            chatter_before_new_response($request, $validator);
-        }
+        Event::dispatch(new ChatterBeforeNewResponse($request));
 
         if (config('chatter.security.limit_time_between_posts')) {
             if ($this->notEnoughTimeBetweenPosts()) {
@@ -63,7 +52,7 @@ class ChatterPostController extends Controller
                     'chatter_alert'      => trans('chatter::alert.danger.reason.prevent_spam', [
                                                 'minutes' => $minutes,
                                             ]),
-                    ];
+                ];
                 return back()->with($chatter_alert)->withInput();
             }
         }
@@ -75,10 +64,9 @@ class ChatterPostController extends Controller
         }
 
         $new_post = Models::post()->create($request->all());
-
         $discussion = Models::discussion()->find($request->chatter_discussion_id);
-
         $category = Models::category()->find($discussion->chatter_category_id);
+
         if (!isset($category->slug)) {
             $category = Models::category()->first();
         }
@@ -136,7 +124,6 @@ class ChatterPostController extends Controller
         
         foreach ($users as $user) {
             //Mail::to($user)->queue(new ChatterDiscussionUpdated($discussion));
-            
             $data = [
                 'type'  => 'notification',
                 'emailTo'   =>  $user->email,
@@ -164,26 +151,16 @@ class ChatterPostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
         $stripped_tags_body = ['body' => strip_tags($request->body)];
-        $validator = Validator::make($stripped_tags_body, [
-            'body' => 'required|min:10',
-        ], [
-            'body.required' => trans('chatter::alert.danger.reason.content_required'),
-            'body.min' => trans('chatter::alert.danger.reason.content_min'),
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
 
         $post = Models::post()->find($id);
         if (!Auth::guest() && ((Auth::user()->id == $post->user_id) || auth()->user()->isRole('admin'))) {
             if ($post->markdown) {
                 $post->body = $request->body;
             } else {
-            $post->body = Purifier::clean($request->body);
+                $post->body = Purifier::clean($request->body);
             }
             $post->save();
 

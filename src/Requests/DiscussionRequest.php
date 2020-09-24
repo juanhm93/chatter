@@ -12,7 +12,9 @@ use App\EventOption;
 use DB;
 use SpamScore;
 
-class PostRequest extends FormRequest
+use DevDojo\Chatter\Requests\PostRequest;
+
+class DiscussionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +30,7 @@ class PostRequest extends FormRequest
     {
         $req = $this;
         $validator->after(function ($validator) use ($req) {
-            $score = SpamScore::score("{$req->body}");
+            $score = SpamScore::score("{$req->title}");
             if ($score > 99) {
                  return $validator
                     ->errors()
@@ -45,15 +47,23 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-            'body' => 'required|min:10',
+            'title'               => 'required|min:5|max:255',
+            'body'                => 'required|min:10',
+            'chatter_category_id' => 'required'
         ];
     }
 
     public function messages()
     {
         return [
-            'body.required' => trans('chatter::alert.danger.reason.content_required'),
-            'body.min' => trans('chatter::alert.danger.reason.content_min'),
+            'title.required' =>  trans('chatter::alert.danger.reason.title_required'),
+            'title.min'     => [
+                'string'  => trans('chatter::alert.danger.reason.title_min'),
+            ],
+            'title.max' => [
+                'string'  => trans('chatter::alert.danger.reason.title_max'),
+            ],
+            'chatter_category_id.required' => trans('chatter::alert.danger.reason.category_required'),
         ];
     }
 }

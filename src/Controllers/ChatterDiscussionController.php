@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as Controller;
 use Validator;
 
+use DevDojo\Chatter\Requests\DiscussionRequest;
+
 class ChatterDiscussionController extends Controller
 {
     /**
@@ -21,16 +23,6 @@ class ChatterDiscussionController extends Controller
      */
     public function index(Request $request)
     {
-        /*$total = 10;
-        $offset = 0;
-        if ($request->total) {
-            $total = $request->total;
-        }
-        if ($request->offset) {
-            $offset = $request->offset;
-        }
-        $discussions = Models::discussion()->with('user')->with('post')->with('postsCount')->with('category')->orderBy('created_at', 'ASC')->take($total)->offset($offset)->get();*/
-
         // Return an empty array to avoid exposing user data to the public.
         // This index function is not being used anywhere.
         return response()->json([]);
@@ -55,39 +47,14 @@ class ChatterDiscussionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DiscussionRequest $request)
     {
-        $request->request->add(['body_content' => strip_tags($request->body)]);
-
-        $validator = Validator::make($request->all(), [
-            'title'               => 'required|min:5|max:255',
-            'body_content'        => 'required|min:10',
-            'chatter_category_id' => 'required',
-         ],[
-			'title.required' =>  trans('chatter::alert.danger.reason.title_required'),
-			'title.min'     => [
-				'string'  => trans('chatter::alert.danger.reason.title_min'),
-			],
-			'title.max' => [
-				'string'  => trans('chatter::alert.danger.reason.title_max'),
-			],
-			'body_content.required' => trans('chatter::alert.danger.reason.content_required'),
-			'body_content.min' => trans('chatter::alert.danger.reason.content_min'),
-			'chatter_category_id.required' => trans('chatter::alert.danger.reason.category_required'),
-		]);
-        
-
         Event::dispatch(new ChatterBeforeNewDiscussion($request, $validator));
         if (function_exists('chatter_before_new_discussion')) {
             chatter_before_new_discussion($request, $validator);
         }
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
         $user_id = Auth::user()->id;
-
         if (config('chatter.security.limit_time_between_posts')) {
             if ($this->notEnoughTimeBetweenDiscussion()) {
                 $minutes = trans_choice('chatter::messages.words.minutes', config('chatter.security.time_between_posts'));
@@ -139,9 +106,9 @@ class ChatterDiscussionController extends Controller
             'body'                  => $request->body,
             ];
 
-        if (config('chatter.editor') == 'simplemde'):
-           $new_post['markdown'] = 1;
-        endif;
+        if (config('chatter.editor') == 'simplemde') {
+            $new_post['markdown'] = 1;
+        }
 
         // add the user to automatically be notified when new posts are submitted
         $discussion->users()->attach($user_id);
@@ -207,9 +174,11 @@ class ChatterDiscussionController extends Controller
         if ($category != $discussion_category->slug) {
             return redirect(config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$discussion_category->slug.'/'.$discussion->slug);
         }
-        $posts = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->orderBy(config('chatter.order_by.posts.order'), config('chatter.order_by.posts.by'))->paginate(10);
-		$first_post = $posts->first()->body;
-		
+        $posts = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)
+            ->orderBy(config('chatter.order_by.posts.order'), config('chatter.order_by.posts.by'))
+            ->paginate(10);
+        $first_post = $posts->first()->body;
+
         $chatter_editor = config('chatter.editor');
 
         if ($chatter_editor == 'simplemde') {

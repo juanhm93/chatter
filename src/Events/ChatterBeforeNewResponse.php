@@ -12,10 +12,6 @@ class ChatterBeforeNewResponse
      */
     public $request;
 
-    /**
-     * @var Validator
-     */
-    public $validator;
 
     /**
      * Constructor.
@@ -23,9 +19,8 @@ class ChatterBeforeNewResponse
      * @param Request   $request
      * @param Validator $validator
      */
-    public function __construct(Request $request, Validator $validator)
+    public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->validator = $validator;
     }
 }
