@@ -49,9 +49,9 @@ class ChatterDiscussionController extends Controller
      */
     public function store(DiscussionRequest $request)
     {
-        Event::dispatch(new ChatterBeforeNewDiscussion($request, $validator));
+        Event::dispatch(new ChatterBeforeNewDiscussion($request));
         if (function_exists('chatter_before_new_discussion')) {
-            chatter_before_new_discussion($request, $validator);
+            chatter_before_new_discussion($request);
         }
 
         $user_id = Auth::user()->id;
