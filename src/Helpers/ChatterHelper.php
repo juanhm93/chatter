@@ -103,7 +103,7 @@ class ChatterHelper
      */
     public static function categoriesMenu($categories)
     {
-        $menu = '<ul class="nav nav-pills nav-stacked">';
+        $menu = '<ul class="nav nav-pills nav-stacked flex-column color--marker">';
 
         foreach ($categories as $category) {
             $menu .= '<li>';
