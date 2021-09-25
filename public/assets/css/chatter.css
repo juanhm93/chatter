@@ -1095,31 +1095,6 @@ div.mce-edit-area {
   border-radius: 50%;
 }
 /********** End Toggle Switch CSS **********/
-/* #pagination {
-  font-size: 18px;
-}
-#pagination .pagination > .active > span {
-  background: none;
-  color: #333;
-  font-weight: bold;
-  border: 0px;
-}
-#pagination .pagination > .disabled > span {
-  border: 0px;
-  color: #ccc;
-}
-#pagination .pagination > li > a,
-#pagination .pagination > li > span {
-  border: 0px;
-  padding: 6px 5px;
-  color: #777;
-}
-#pagination .pagination > li > a:focus,
-#pagination .pagination > li > a:hover,
-#pagination .pagination > li > span:focus,
-#pagination .pagination > li > span:hover {
-  background: none;
-  font-weight: bold;
-} */
+
 
 /*# sourceMappingURL=chatter.css.map */
