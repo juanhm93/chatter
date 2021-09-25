@@ -1095,7 +1095,7 @@ div.mce-edit-area {
   border-radius: 50%;
 }
 /********** End Toggle Switch CSS **********/
-#pagination {
+/* #pagination {
   font-size: 18px;
 }
 #pagination .pagination > .active > span {
@@ -1120,6 +1120,6 @@ div.mce-edit-area {
 #pagination .pagination > li > span:hover {
   background: none;
   font-weight: bold;
-}
+} */
 
 /*# sourceMappingURL=chatter.css.map */
