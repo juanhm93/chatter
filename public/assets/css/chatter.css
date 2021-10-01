@@ -248,11 +248,15 @@ body {
 #chatter .left-column .btn {
   width: 100%;
 }
+#chatter .left-column .nav-pills > li {
+  list-style-type: square;
+  list-style-position: inside;
+  line-height: 1;
+}
 #chatter .left-column .nav-pills > li > a {
-  padding: 5px;
-  padding-left: 30px;
-  padding-right: 0px;
+  padding: 0;
   position: relative;
+  margin-left: -10px;
 }
 #chatter .left-column .nav-pills > li > a .chatter-box {
   width: 10px;
@@ -267,6 +271,21 @@ body {
 #chatter .left-column .nav-pills > li > a:focus,
 #chatter .left-column .nav-pills > li > a:hover {
   background: none;
+}
+#chatter .left-column .nav-pills > li::marker {
+  font-size: 160%;
+}
+.color--marker li:nth-child(1)::marker {
+  color: #E67E22;
+}
+.color--marker li:nth-child(2)::marker {
+  color: #3498DB;
+}
+.color--marker li:nth-child(3)::marker {
+  color: #9B59B6;
+}
+.color--marker li:nth-child(4)::marker {
+  color: #2ECC71;
 }
 #chatter .chatter_avatar {
   float: left;
@@ -633,7 +652,8 @@ body {
   text-decoration: none;
 }
 #chatter .chatter_sidebar ul {
-  margin-left: 10px;
+  margin-left: 30px;
+  margin-top: -5px;
 }
 #chatter.discussion #editor .mce-toolbar-grp {
   padding: 0px;
@@ -1098,3 +1118,25 @@ div.mce-edit-area {
 
 
 /*# sourceMappingURL=chatter.css.map */
+
+td {
+  padding-top: 15px;
+}
+#pagination nav div span span span svg, #pagination nav div span a  svg {
+  width: 30px;
+}
+#pagination nav div:nth-child(2) div:nth-child(1) {
+  margin-top: 10px;
+}
+#pagination nav div:nth-child(2) div:nth-child(2) {
+  line-height: 45px;
+}  
+
+@media (max-width: 767px) { 
+  #tableEventParticiper{
+      table-layout: fixed;
+  }
+  .chatter_middle_details span img {
+      width: 70px;
+  }
+}
