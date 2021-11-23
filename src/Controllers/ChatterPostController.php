@@ -14,6 +14,7 @@ use Illuminate\Routing\Controller as Controller;
 use Illuminate\Support\Facades\Mail;
 use Purifier;
 use Validator;
+use User;
 
 use App\Mail\NotificationEmail;
 
@@ -79,12 +80,13 @@ class ChatterPostController extends Controller
             if (function_exists('chatter_after_new_response')) {
                 chatter_after_new_response($request);
             }
-
+            
             // if email notifications are enabled
             if (config('chatter.email.enabled')) {
                 // Send email notifications about new post
                 $this->sendEmailNotifications($new_post->discussion);
             }
+            $this->sendEmailNotificationsAdmin($new_post->discussion);
 
             $chatter_alert = [
                 'chatter_alert_type' => 'success',
@@ -141,6 +143,27 @@ class ChatterPostController extends Controller
 
             Mail::send(new NotificationEmail($data));
         }
+    }
+    private function sendEmailNotificationsAdmin($discussion)
+    {
+        $users = User::where("roles",'like','%admin%')->get();
+        
+        foreach ($users as $user) {
+            $data = [
+                'type'  => 'notification',
+                'emailTo'   =>  $user->email,
+                'subject'  => 'Conversaciones Vivetix: Nuevo mensaje',
+                'nameFrom'  => 'Vivetix',
+                'bodyIntro'  => 'Se creo un nueva pregunta o mensaje en el foro',
+                'actionText'  => 'Ir a la conversación',
+                'actionLink'  => url(config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$discussion->category->slug.'/'.$discussion->slug),
+                'unsubscribeUrl'  => url('/') .'/'.config('chatter.routes.home') .'/'.config('chatter.routes.discussion').'/'.$discussion->category->slug.'/'.$discussion->slug,
+                'unsubscribeText'  => trans('chatter::email.unsuscribe.link'),
+            ];
+
+            Mail::send(new NotificationEmail($data));
+        }
+        
     }
 
     /**
