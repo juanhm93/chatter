@@ -14,6 +14,7 @@ use Illuminate\Routing\Controller as Controller;
 use Illuminate\Support\Facades\Mail;
 use Purifier;
 use Validator;
+use User;
 
 use App\Mail\NotificationEmail;
 
@@ -145,9 +146,12 @@ class ChatterPostController extends Controller
     }
     private function sendEmailNotificationsAdmin($discussion)
     {
+        $users = User::where("roles",'like','%admin%')->get();
+        
+        foreach ($users as $user) {
             $data = [
                 'type'  => 'notification',
-                'emailTo'   =>  'gabriel@vivetix.com',
+                'emailTo'   =>  $user->email,
                 'subject'  => 'Conversaciones Vivetix: Nuevo mensaje',
                 'nameFrom'  => 'Vivetix',
                 'bodyIntro'  => 'Se creo un nueva pregunta o mensaje en el foro',
@@ -158,6 +162,7 @@ class ChatterPostController extends Controller
             ];
 
             Mail::send(new NotificationEmail($data));
+        }
         
     }
 
