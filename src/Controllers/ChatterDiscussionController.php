@@ -174,18 +174,14 @@ class ChatterDiscussionController extends Controller
         if ($category != $discussion_category->slug) {
             return redirect(config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$discussion_category->slug.'/'.$discussion->slug);
         }
-        $posts = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id);
-        $first_post = $posts->first()->body;
-        
-        $without_first = array_shift($posts);
 
-        $without_first->orderBy(config('chatter.order_by.posts.order'), config('chatter.order_by.posts.by'))
+        $principal_post = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->first();
+        
+        $posts = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->orderBy(config('chatter.order_by.posts.order'), config('chatter.order_by.posts.by'))
             ->paginate(10);
 
-        $all_discussion =  array_unshift($first_post,$without_first);
+        $first_post = $posts->first()->body;
         
-        $post = $all_discussion;
-
         $chatter_editor = config('chatter.editor');
 
         if ($chatter_editor == 'simplemde') {
@@ -197,7 +193,7 @@ class ChatterDiscussionController extends Controller
 
         $discussion->increment('views');
         
-        return view('chatter::discussion', compact('discussion', 'posts', 'chatter_editor', 'first_post'));
+        return view('chatter::discussion', compact('discussion', 'posts', 'chatter_editor', 'first_post','principal_post'));
     }
 
     /**
