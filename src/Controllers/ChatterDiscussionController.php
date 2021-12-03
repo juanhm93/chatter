@@ -175,7 +175,7 @@ class ChatterDiscussionController extends Controller
             return redirect(config('chatter.routes.home').'/'.config('chatter.routes.discussion').'/'.$discussion_category->slug.'/'.$discussion->slug);
         }
 
-        $principal_post = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->first();
+        $principal_post = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->orderBy('id')->first();
         
         $posts = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->orderBy(config('chatter.order_by.posts.order'), config('chatter.order_by.posts.by'))
             ->paginate(10);
