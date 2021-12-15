@@ -179,7 +179,7 @@ class ChatterDiscussionController extends Controller
         
         $posts = Models::post()->with('user')->where('chatter_discussion_id', '=', $discussion->id)->orderBy(config('chatter.order_by.posts.order'), config('chatter.order_by.posts.by'))
             ->paginate(10);
-
+        $posts->prepend($principal_post);
         $first_post = $posts->first()->body;
         
         $chatter_editor = config('chatter.editor');
@@ -193,7 +193,7 @@ class ChatterDiscussionController extends Controller
 
         $discussion->increment('views');
         
-        return view('chatter::discussion', compact('discussion', 'posts', 'chatter_editor', 'first_post','principal_post'));
+        return view('chatter::discussion', compact('discussion', 'posts', 'chatter_editor', 'first_post'));
     }
 
     /**
