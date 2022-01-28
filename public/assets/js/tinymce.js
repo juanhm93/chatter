@@ -12,6 +12,8 @@ tinymce.init({
 	height : '220',
 	content_css : '/vendor/devdojo/chatter/assets/css/chatter.css',
 	template_popup_height: 380,
+    image_title: true,
+    automatic_uploads: true,
     file_picker_types: 'image',
     file_picker_callback: function (cb, value, meta) {
       var input = document.createElement('input');
@@ -73,6 +75,8 @@ function initializeNewTinyMCE(id){
         content_css : '/vendor/devdojo/chatter/assets/css/chatter.css',
         template_popup_height: 380,
 		default_link_target: '_blank',
+        image_title: true,
+        automatic_uploads: true,
         file_picker_types: 'image',
         file_picker_callback: function (cb, value, meta) {
       var input = document.createElement('input');
