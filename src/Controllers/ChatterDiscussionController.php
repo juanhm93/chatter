@@ -89,6 +89,7 @@ class ChatterDiscussionController extends Controller
             'title'               => $request->title,
             'chatter_category_id' => $request->chatter_category_id,
             'user_id'             => $user_id,
+            'whitebrand_id'       => $request->whitebrand_id,
             'slug'                => $slug,
             'color'               => $request->color,
             ];
